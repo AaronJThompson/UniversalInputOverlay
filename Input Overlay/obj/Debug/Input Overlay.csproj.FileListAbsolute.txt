@@ -1,0 +1,13 @@
+C:\Users\Aaron J Thompson\source\repos\Input Overlay\Input Overlay\bin\Debug\Input Overlay.exe.config
+C:\Users\Aaron J Thompson\source\repos\Input Overlay\Input Overlay\bin\Debug\Input Overlay.exe
+C:\Users\Aaron J Thompson\source\repos\Input Overlay\Input Overlay\bin\Debug\Input Overlay.pdb
+C:\Users\Aaron J Thompson\source\repos\Input Overlay\Input Overlay\obj\Debug\Input Overlay.csprojAssemblyReference.cache
+C:\Users\Aaron J Thompson\source\repos\Input Overlay\Input Overlay\obj\Debug\Input_Overlay.Properties.Resources.resources
+C:\Users\Aaron J Thompson\source\repos\Input Overlay\Input Overlay\obj\Debug\Input Overlay.csproj.GenerateResource.cache
+C:\Users\Aaron J Thompson\source\repos\Input Overlay\Input Overlay\obj\Debug\Input Overlay.csproj.CoreCompileInputs.cache
+C:\Users\Aaron J Thompson\source\repos\Input Overlay\Input Overlay\obj\Debug\Input Overlay.exe
+C:\Users\Aaron J Thompson\source\repos\Input Overlay\Input Overlay\obj\Debug\Input Overlay.pdb
+C:\Users\Aaron J Thompson\source\repos\Input Overlay\Input Overlay\obj\Debug\Input_Overlay.Form1.resources
+C:\Users\Aaron J Thompson\source\repos\Input Overlay\Input Overlay\obj\Debug\Input Overlay.csproj.CopyComplete
+C:\Users\Aaron J Thompson\source\repos\Input Overlay\Input Overlay\bin\Debug\Gma.System.MouseKeyHook.dll
+C:\Users\Aaron J Thompson\source\repos\Input Overlay\Input Overlay\bin\Debug\XInput.Wrapper.dll
