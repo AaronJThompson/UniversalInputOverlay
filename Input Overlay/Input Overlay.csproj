@@ -59,6 +59,8 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Hooking\Imports.cs" />
+    <Compile Include="Hooking\InputHook.cs" />
     <Compile Include="Key.cs" />
     <Compile Include="Keyboard.cs" />
     <Compile Include="KeyboardHook.cs" />
@@ -182,5 +184,6 @@
   <ItemGroup>
     <None Include="Resources\tab-pressed.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

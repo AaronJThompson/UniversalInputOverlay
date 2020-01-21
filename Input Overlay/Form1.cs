@@ -67,7 +67,7 @@ namespace Input_Overlay
             } else
             {
                 kb.Paint(e);
-                mouse.Paint(e);
+                //mouse.Paint(e);
             }
             e.Graphics.DrawString(CalculateFrameRate().ToString(), font, Brushes.Black, new Point(0, 0));
         }
@@ -85,7 +85,9 @@ namespace Input_Overlay
             kb = new Keyboard(KeyboardMouseHook);
             controller.gamepad.KeyDown += Gamepad_KeyDown;
             kb.m_GlobalHook.KeyDown += M_GlobalHook_KeyDown;
-            mouse = new Mouse(new Point(800, 400),MouseHook);
+            //mouse = new Mouse(new Point(800, 400),MouseHook);
+
+            Hooking.InputHook.HookMouse();
         }
         private void ChooseController(object sender, EventArgs e)
         {
@@ -120,6 +122,7 @@ namespace Input_Overlay
             kb?.Stop();
             controller = null;
             kb = null;
+            Hooking.InputHook.UnHookMouse();
         }
 
         private void Form1_FormClosing(Object sender, EventArgs e)
