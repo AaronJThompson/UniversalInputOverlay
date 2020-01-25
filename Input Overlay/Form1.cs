@@ -17,11 +17,10 @@ namespace Input_Overlay
     {
         Controller controller = null;
         Keyboard kb = null;
-        Mouse mouse = null;
         private bool controllerMode = true;
         private Rectangle background;
         private IKeyboardMouseEvents KeyboardMouseHook;
-        private IMouseEvents MouseHook;
+        private Mouse mouse;
         private static int lastTick;
         private static int lastFrameRate;
         private static int frameRate;
@@ -35,7 +34,6 @@ namespace Input_Overlay
             this.FormClosing += Form1_FormClosing;
             this.ClientSize = new Size(780, 520);
             KeyboardMouseHook = Hook.GlobalEvents();
-            MouseHook = Hook.GlobalEvents();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -67,7 +65,7 @@ namespace Input_Overlay
             } else
             {
                 kb.Paint(e);
-                //mouse.Paint(e);
+                mouse.Paint(e);
             }
             e.Graphics.DrawString(CalculateFrameRate().ToString(), font, Brushes.Black, new Point(0, 0));
         }
@@ -85,9 +83,7 @@ namespace Input_Overlay
             kb = new Keyboard(KeyboardMouseHook);
             controller.gamepad.KeyDown += Gamepad_KeyDown;
             kb.m_GlobalHook.KeyDown += M_GlobalHook_KeyDown;
-            //mouse = new Mouse(new Point(800, 400),MouseHook);
-
-            Hooking.InputHook.HookMouse();
+            mouse = new Mouse(new Point(800, 400));
         }
         private void ChooseController(object sender, EventArgs e)
         {
@@ -122,7 +118,7 @@ namespace Input_Overlay
             kb?.Stop();
             controller = null;
             kb = null;
-            Hooking.InputHook.UnHookMouse();
+            mouse?.Stop();
         }
 
         private void Form1_FormClosing(Object sender, EventArgs e)

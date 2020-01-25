@@ -11,6 +11,9 @@ using System.Collections.Concurrent;
 using Input = System.Windows.Input;
 namespace Input_Overlay
 {
+    using Hooking;
+    using System.Runtime.InteropServices;
+    using static Hooking.InputHook;
     class Mouse
     {
         private IMouseEvents m_GlobalHook;
@@ -19,18 +22,32 @@ namespace Input_Overlay
         private MouseFrame lastMouseFrame;
         private MouseSpeed currentSpeed;
         private Point pos;
-        public Mouse(Point pos,IMouseEvents km)
+        private static HookProc mouseDelegate;
+        private IntPtr _hookID;
+        public Mouse(Point pos)
         {
             mouseBuffer = new FixedSizedQueue<MouseFrame>(10);
             timer = Stopwatch.StartNew();
-            m_GlobalHook = km;
-            m_GlobalHook.MouseMove += M_GlobalHook_MouseMove;
             this.pos = pos;
+            mouseDelegate = ProcessMouse;
+            _hookID = HookMouse(mouseDelegate);
         }
 
-        private void M_GlobalHook_MouseMove(object sender, MouseEventArgs e)
+        public void Stop()
         {
-            AddSpeedFrame(Cursor.Position.X, Cursor.Position.Y);
+            UnHookMouse();
+        }
+
+        private IntPtr ProcessMouse(
+            int nCode, IntPtr wParam, IntPtr lParam)
+        {
+            if (nCode >= 0 &&
+                MouseMessages.WM_MOUSEMOVE == (MouseMessages)wParam)
+            {
+                MSLLHOOKSTRUCT hookStruct = (MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(MSLLHOOKSTRUCT));
+                AddSpeedFrame(hookStruct.pt.x, hookStruct.pt.y);
+            }
+            return CallNextHookEx(_hookID, nCode, wParam, lParam);
         }
         private void AddSpeedFrame(int x, int y)
         {

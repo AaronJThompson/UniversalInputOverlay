@@ -13,9 +13,16 @@ namespace Input_Overlay.Hooking
         private static HookProc _proc = HookCallback;
         private static IntPtr _hookID = IntPtr.Zero;
 
-        public static void HookMouse()
+        public static IntPtr HookMouse()
         {
             _hookID = SetHook(_proc);
+            return _hookID;
+        }
+
+        public static IntPtr HookMouse(HookProc hookProc)
+        {
+            _hookID = SetHook(hookProc);
+            return _hookID;
         }
 
         public static void UnHookMouse()
@@ -29,11 +36,11 @@ namespace Input_Overlay.Hooking
             using (ProcessModule curModule = curProcess.MainModule)
             {
                 return SetWindowsHookEx(WH_MOUSE_LL, proc,
-                    GetModuleHandle(curModule.ModuleName), 0);
+                    IntPtr.Zero, 0);
             }
         }
 
-        internal delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
+        public delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
 
         private static IntPtr HookCallback(
             int nCode, IntPtr wParam, IntPtr lParam)
@@ -49,7 +56,7 @@ namespace Input_Overlay.Hooking
 
         private const int WH_MOUSE_LL = 14;
 
-        private enum MouseMessages
+        public enum MouseMessages
         {
             WM_LBUTTONDOWN = 0x0201,
             WM_LBUTTONUP = 0x0202,
@@ -60,14 +67,14 @@ namespace Input_Overlay.Hooking
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        private struct POINT
+        public struct POINT
         {
             public int x;
             public int y;
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        private struct MSLLHOOKSTRUCT
+        public struct MSLLHOOKSTRUCT
         {
             public POINT pt;
             public uint mouseData;
@@ -77,18 +84,18 @@ namespace Input_Overlay.Hooking
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern IntPtr SetWindowsHookEx(int idHook,
+        public static extern IntPtr SetWindowsHookEx(int idHook,
             HookProc lpfn, IntPtr hMod, uint dwThreadId);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool UnhookWindowsHookEx(IntPtr hhk);
+        public static extern bool UnhookWindowsHookEx(IntPtr hhk);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode,
+        public static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode,
             IntPtr wParam, IntPtr lParam);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern IntPtr GetModuleHandle(string lpModuleName);
+        public static extern IntPtr GetModuleHandle(string lpModuleName);
     }
 }
