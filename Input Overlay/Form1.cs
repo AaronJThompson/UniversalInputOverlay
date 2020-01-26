@@ -8,8 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
-using Gma.System.MouseKeyHook;
 using XInput.Wrapper;
+
 
 namespace Input_Overlay
 {
@@ -19,7 +19,6 @@ namespace Input_Overlay
         Keyboard kb = null;
         private bool controllerMode = true;
         private Rectangle background;
-        private IKeyboardMouseEvents KeyboardMouseHook;
         private Mouse mouse;
         private static int lastTick;
         private static int lastFrameRate;
@@ -33,7 +32,7 @@ namespace Input_Overlay
             InitializeComponent();
             this.FormClosing += Form1_FormClosing;
             this.ClientSize = new Size(780, 520);
-            KeyboardMouseHook = Hook.GlobalEvents();
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
