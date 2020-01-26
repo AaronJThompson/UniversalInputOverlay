@@ -7,7 +7,7 @@ using Linearstar.Windows.RawInput;
 
 namespace Input_Overlay.Hooking
 {
-    class RawInputEventArgs : EventArgs
+    public class RawInputEventArgs : EventArgs
     {
         public RawInputEventArgs(RawInputData data)
         {

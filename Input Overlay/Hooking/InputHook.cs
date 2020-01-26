@@ -5,11 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
-using SharpLib;
+using Linearstar.Windows.RawInput;
+
 namespace Input_Overlay.Hooking
 {
     public class InputHook
     {
-        SharpLib.Hid
+        private RawInputDevice[] devices;
+
+        public InputHook()
+        {
+            devices = RawInputDevice.GetDevices();
+        }
     }
 }

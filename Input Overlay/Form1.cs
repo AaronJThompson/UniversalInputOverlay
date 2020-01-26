@@ -9,17 +9,18 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using XInput.Wrapper;
+using Linearstar.Windows.RawInput;
 
 
 namespace Input_Overlay
 {
     public partial class Form1 : Form
     {
+        public event EventHandler<Hooking.RawInputEventArgs> Input;
         Controller controller = null;
-        Keyboard kb = null;
         private bool controllerMode = true;
         private Rectangle background;
-        private Mouse mouse;
+        //private Mouse mouse;
         private static int lastTick;
         private static int lastFrameRate;
         private static int frameRate;
@@ -28,6 +29,8 @@ namespace Input_Overlay
 
         public Form1()
         {
+            RawInputDevice.RegisterDevice(HidUsageAndPage.Keyboard, RawInputDeviceFlags.InputSink | RawInputDeviceFlags.NoLegacy, Handle);
+            RawInputDevice.RegisterDevice(HidUsageAndPage.Mouse, RawInputDeviceFlags.InputSink | RawInputDeviceFlags.NoLegacy, Handle);
             this.Load += Form1_Load;
             InitializeComponent();
             this.FormClosing += Form1_FormClosing;
@@ -63,8 +66,8 @@ namespace Input_Overlay
                 controller.Paint(X, Y, e);
             } else
             {
-                kb.Paint(e);
-                mouse.Paint(e);
+                //kb.Paint(e);
+                //mouse.Paint(e);
             }
             e.Graphics.DrawString(CalculateFrameRate().ToString(), font, Brushes.Black, new Point(0, 0));
         }
@@ -79,10 +82,10 @@ namespace Input_Overlay
             X.StartPolling(X.Gamepad_2);
             X.StartPolling(X.Gamepad_3);
             X.StartPolling(X.Gamepad_4);
-            kb = new Keyboard(KeyboardMouseHook);
             controller.gamepad.KeyDown += Gamepad_KeyDown;
-            kb.m_GlobalHook.KeyDown += M_GlobalHook_KeyDown;
-            mouse = new Mouse(new Point(800, 400));
+            Input += this.onInput;
+            //kb.m_GlobalHook.KeyDown += M_GlobalHook_KeyDown;
+            //mouse = new Mouse(new Point(800, 400));
         }
         private void ChooseController(object sender, EventArgs e)
         {
@@ -104,6 +107,28 @@ namespace Input_Overlay
             background = new Rectangle(0, 0, this.Size.Width, this.Size.Height);
         }
 
+        protected override void WndProc(ref Message m)
+        {
+            const int WM_INPUT = 0x00FF;
+
+            if (m.Msg == WM_INPUT)
+            {
+                var data = RawInputData.FromHandle(m.LParam);
+
+                Input?.Invoke(this, new Hooking.RawInputEventArgs(data));
+            }
+
+            base.WndProc(ref m);
+        }
+
+
+        private void onInput(object sender, Hooking.RawInputEventArgs e)
+        {
+            var data = e.Data;
+
+            Console.WriteLine(data);
+        }
+
         private void Gamepad_KeyDown(object sender, EventArgs e)
         {
             controllerMode = true;
@@ -114,14 +139,16 @@ namespace Input_Overlay
         public void Unsubscribe()
         {
             controller?.Stop();
-            kb?.Stop();
+            //kb?.Stop();
             controller = null;
-            kb = null;
-            mouse?.Stop();
+            //kb = null;
+            //mouse?.Stop();
         }
 
         private void Form1_FormClosing(Object sender, EventArgs e)
         {
+            RawInputDevice.UnregisterDevice(HidUsageAndPage.Keyboard);
+            RawInputDevice.UnregisterDevice(HidUsageAndPage.Mouse);
             Unsubscribe();
             Application.Exit();
             Application.ExitThread();
