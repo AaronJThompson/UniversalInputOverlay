@@ -9,15 +9,15 @@ namespace Input_Overlay.Hooking
 {
     public class KeyData
     {
-        public int keyValue;
-        public bool isDown;
+        public int KeyValue;
+        public bool IsDown;
 
         public KeyData() { }
 
         public KeyData(int key, bool down)
         {
-            keyValue = key;
-            isDown = down;
+            KeyValue = key;
+            IsDown = down;
         }
     }
 }

@@ -21,7 +21,8 @@ namespace Input_Overlay
         Controller controller = null;
         private bool controllerMode = true;
         private Rectangle background;
-        //private Mouse mouse;
+        private Mouse mouse;
+        private Keyboard keyboard;
         private static int lastTick;
         private static int lastFrameRate;
         private static int frameRate;
@@ -66,8 +67,8 @@ namespace Input_Overlay
                 controller.Paint(X, Y, e);
             } else
             {
-                //kb.Paint(e);
-                //mouse.Paint(e);
+                keyboard.Paint(e);
+                mouse.Paint(e);
             }
             e.Graphics.DrawString(CalculateFrameRate().ToString(), font, Brushes.Black, new Point(0, 0));
         }
@@ -75,6 +76,7 @@ namespace Input_Overlay
         public void Subscribe()
         {
             // Note: for the application hook, use the Hook.AppEvents() instead
+            keyboard = new Keyboard(inputHook);
             controller = new Controller(1);
             X.Gamepad_2.KeyDown += ChooseController;
             X.Gamepad_3.KeyDown += ChooseController;
@@ -83,9 +85,8 @@ namespace Input_Overlay
             X.StartPolling(X.Gamepad_3);
             X.StartPolling(X.Gamepad_4);
             controller.gamepad.KeyDown += Gamepad_KeyDown;
-            inputHook.onMouseMove += this.onMouseMove;
-            //kb.m_GlobalHook.KeyDown += M_GlobalHook_KeyDown;
-            //mouse = new Mouse(new Point(800, 400));
+            inputHook.onKeyDown += Keyboard_KeyDown;
+            mouse = new Mouse(new Point(800, 400), inputHook);
         }
         private void ChooseController(object sender, EventArgs e)
         {
@@ -100,7 +101,7 @@ namespace Input_Overlay
             controller.gamepad.KeyDown += Gamepad_KeyDown;
 
         }
-        private void M_GlobalHook_KeyDown(object sender, KeyEventArgs e)
+        private void Keyboard_KeyDown(object sender, KeyEventArgs e)
         {
             controllerMode = false;
             this.ClientSize = new Size(1100, 520);
@@ -115,7 +116,7 @@ namespace Input_Overlay
         }
 
 
-        private void onMouseMove(object sender, RawInputMouseEventArgs e)
+        private void onMouseMove(object sender, MouseEventArgs e)
         {
             Console.WriteLine("dX: {0}  dY: {1}", e.Data.DeltaX, e.Data.DeltaY);
         }
@@ -130,11 +131,12 @@ namespace Input_Overlay
         public void Unsubscribe()
         {
             controller?.Stop();
-            //kb?.Stop();
+            keyboard?.Stop();
+            mouse?.Stop();
             controller = null;
-            //kb = null;
-            //mouse?.Stop();
-            inputHook.UnHook();
+            keyboard = null;
+            mouse = null;
+            inputHook?.UnHook();
         }
 
         private void Form1_FormClosing(Object sender, EventArgs e)

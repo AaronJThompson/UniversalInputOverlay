@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Input_Overlay.Hooking
 {
-    public class RawInputMouseEventArgs : EventArgs
+    public class MouseEventArgs : EventArgs
     {
-        public RawInputMouseEventArgs(MouseData data)
+        public MouseEventArgs(MouseData data)
         {
             Data = data;
         }

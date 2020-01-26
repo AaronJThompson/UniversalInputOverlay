@@ -119,9 +119,11 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Hooking\InputHook.cs" />
+    <Compile Include="Hooking\KeyData.cs" />
+    <Compile Include="Hooking\KeyEventArgs.cs" />
     <Compile Include="Hooking\MouseData.cs" />
     <Compile Include="Hooking\RawInputEventArgs.cs" />
-    <Compile Include="Hooking\RawInputMouseEventArgs.cs" />
+    <Compile Include="Hooking\MouseEventArgs.cs" />
     <Compile Include="Key.cs" />
     <Compile Include="Keyboard.cs" />
     <Compile Include="KeyboardHook.cs" />

@@ -13,7 +13,6 @@ namespace Input_Overlay.Hooking
 {
     public class InputHook
     {
-        private RawInputDevice[] devices;
         public event EventHandler<RawInputEventArgs> onInput;
         public event EventHandler<RawInputEventArgs> onMouse;
         public event EventHandler<MouseEventArgs> onMouseMove;
@@ -22,9 +21,8 @@ namespace Input_Overlay.Hooking
         public event EventHandler<KeyEventArgs> onKeyUp;
         public InputHook(IntPtr handle)
         {
-            devices = RawInputDevice.GetDevices();
-            RawInputDevice.RegisterDevice(HidUsageAndPage.Keyboard, RawInputDeviceFlags.InputSink | RawInputDeviceFlags.NoLegacy, handle);
-            RawInputDevice.RegisterDevice(HidUsageAndPage.Mouse, RawInputDeviceFlags.InputSink | RawInputDeviceFlags.NoLegacy, handle);
+            RawInputDevice.RegisterDevice(HidUsageAndPage.Keyboard, RawInputDeviceFlags.InputSink, handle);
+            RawInputDevice.RegisterDevice(HidUsageAndPage.Mouse, RawInputDeviceFlags.InputSink, handle);
             onInput += _onInput;
             onMouse += _onMouse;
             onKeyboard += _onKeyboard;
@@ -32,6 +30,9 @@ namespace Input_Overlay.Hooking
 
         public void UnHook()
         {
+            onInput -= _onInput;
+            onMouse -= _onMouse;
+            onKeyboard -= _onKeyboard;
             RawInputDevice.UnregisterDevice(HidUsageAndPage.Keyboard);
             RawInputDevice.UnregisterDevice(HidUsageAndPage.Mouse);
         }
