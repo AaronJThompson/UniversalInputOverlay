@@ -14,9 +14,10 @@ using Linearstar.Windows.RawInput;
 
 namespace Input_Overlay
 {
+    using Hooking;
     public partial class Form1 : Form
     {
-        public event EventHandler<Hooking.RawInputEventArgs> Input;
+        private InputHook inputHook;
         Controller controller = null;
         private bool controllerMode = true;
         private Rectangle background;
@@ -29,8 +30,7 @@ namespace Input_Overlay
 
         public Form1()
         {
-            RawInputDevice.RegisterDevice(HidUsageAndPage.Keyboard, RawInputDeviceFlags.InputSink | RawInputDeviceFlags.NoLegacy, Handle);
-            RawInputDevice.RegisterDevice(HidUsageAndPage.Mouse, RawInputDeviceFlags.InputSink | RawInputDeviceFlags.NoLegacy, Handle);
+            inputHook = new InputHook(Handle);
             this.Load += Form1_Load;
             InitializeComponent();
             this.FormClosing += Form1_FormClosing;
@@ -83,7 +83,7 @@ namespace Input_Overlay
             X.StartPolling(X.Gamepad_3);
             X.StartPolling(X.Gamepad_4);
             controller.gamepad.KeyDown += Gamepad_KeyDown;
-            Input += this.onInput;
+            inputHook.onInput += this.onInput;
             //kb.m_GlobalHook.KeyDown += M_GlobalHook_KeyDown;
             //mouse = new Mouse(new Point(800, 400));
         }
@@ -109,14 +109,7 @@ namespace Input_Overlay
 
         protected override void WndProc(ref Message m)
         {
-            const int WM_INPUT = 0x00FF;
-
-            if (m.Msg == WM_INPUT)
-            {
-                var data = RawInputData.FromHandle(m.LParam);
-
-                Input?.Invoke(this, new Hooking.RawInputEventArgs(data));
-            }
+            inputHook?.OnWndProc(ref m);
 
             base.WndProc(ref m);
         }
@@ -126,7 +119,6 @@ namespace Input_Overlay
         {
             var data = e.Data;
 
-            Console.WriteLine(data);
         }
 
         private void Gamepad_KeyDown(object sender, EventArgs e)
@@ -143,12 +135,11 @@ namespace Input_Overlay
             controller = null;
             //kb = null;
             //mouse?.Stop();
+            inputHook.UnHook();
         }
 
         private void Form1_FormClosing(Object sender, EventArgs e)
         {
-            RawInputDevice.UnregisterDevice(HidUsageAndPage.Keyboard);
-            RawInputDevice.UnregisterDevice(HidUsageAndPage.Mouse);
             Unsubscribe();
             Application.Exit();
             Application.ExitThread();
