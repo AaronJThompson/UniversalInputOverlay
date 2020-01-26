@@ -7,7 +7,7 @@ using Linearstar.Windows.RawInput;
 
 namespace Input_Overlay.Hooking
 {
-    class MouseData
+    public class MouseData
     {
         public int DeltaX;
         public int DeltaY;

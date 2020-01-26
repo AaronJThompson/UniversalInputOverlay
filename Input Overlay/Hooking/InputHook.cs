@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using Linearstar.Windows.RawInput;
+using Linearstar.Windows.RawInput.Native;
 using System.Windows.Forms;
 
 namespace Input_Overlay.Hooking
@@ -15,7 +16,10 @@ namespace Input_Overlay.Hooking
         private RawInputDevice[] devices;
         public event EventHandler<RawInputEventArgs> onInput;
         public event EventHandler<RawInputEventArgs> onMouse;
+        public event EventHandler<MouseEventArgs> onMouseMove;
         public event EventHandler<RawInputEventArgs> onKeyboard;
+        public event EventHandler<KeyEventArgs> onKeyDown;
+        public event EventHandler<KeyEventArgs> onKeyUp;
         public InputHook(IntPtr handle)
         {
             devices = RawInputDevice.GetDevices();
@@ -23,6 +27,7 @@ namespace Input_Overlay.Hooking
             RawInputDevice.RegisterDevice(HidUsageAndPage.Mouse, RawInputDeviceFlags.InputSink | RawInputDeviceFlags.NoLegacy, handle);
             onInput += _onInput;
             onMouse += _onMouse;
+            onKeyboard += _onKeyboard;
         }
 
         public void UnHook()
@@ -50,8 +55,33 @@ namespace Input_Overlay.Hooking
         private void _onMouse(object sender, RawInputEventArgs e)
         {
             RawInputMouseData data = (RawInputMouseData)e.Data;
-            Console.WriteLine("dX: {0} dY: {1}", data.Mouse.LastX, data.Mouse.LastY);
-            //switch()
+            
+            switch(data.Mouse.Flags)
+            {
+                case RawMouseFlags.MoveRelative:
+                    var moveData = new MouseData(data);
+                    onMouseMove?.Invoke(this, new MouseEventArgs(moveData));
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void _onKeyboard(object sender, RawInputEventArgs e)
+        {
+            RawInputKeyboardData data = (RawInputKeyboardData)e.Data;
+            KeyData keyData = null;
+            switch (data.Keyboard.Flags)
+            {
+                case RawKeyboardFlags.Down:
+                    keyData = new KeyData(data.Keyboard.VirutalKey, true);
+                    onKeyDown?.Invoke(this, new KeyEventArgs(keyData));
+                    break;
+                case RawKeyboardFlags.Up:
+                    keyData = new KeyData(data.Keyboard.VirutalKey, false);
+                    onKeyUp?.Invoke(this, new KeyEventArgs(keyData));
+                    break;
+            }
         }
 
         public void OnWndProc(ref Message m)

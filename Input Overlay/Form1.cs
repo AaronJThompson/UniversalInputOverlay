@@ -83,7 +83,7 @@ namespace Input_Overlay
             X.StartPolling(X.Gamepad_3);
             X.StartPolling(X.Gamepad_4);
             controller.gamepad.KeyDown += Gamepad_KeyDown;
-            inputHook.onInput += this.onInput;
+            inputHook.onMouseMove += this.onMouseMove;
             //kb.m_GlobalHook.KeyDown += M_GlobalHook_KeyDown;
             //mouse = new Mouse(new Point(800, 400));
         }
@@ -115,10 +115,9 @@ namespace Input_Overlay
         }
 
 
-        private void onInput(object sender, Hooking.RawInputEventArgs e)
+        private void onMouseMove(object sender, RawInputMouseEventArgs e)
         {
-            var data = e.Data;
-
+            Console.WriteLine("dX: {0}  dY: {1}", e.Data.DeltaX, e.Data.DeltaY);
         }
 
         private void Gamepad_KeyDown(object sender, EventArgs e)
