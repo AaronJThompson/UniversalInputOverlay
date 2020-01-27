@@ -23,40 +23,40 @@ namespace Input_Overlay.Input
         private RectangleF rightRectangle;
         private long lastFrame = 0;
         private Point pos;
-        private Image leftImage;
-        private Image leftPressedImage;
-        private Image rightImage;
+        //private Image leftImage;
+        //private Image leftPressedImage;
+        //private Image rightImage;
         private PointF leftOrigin;
         private PointF rightOrigin;
-        private Image rightPressedImage;
+        //private Image rightPressedImage;
         private float scaleY = .55f;
         private float scaleX = .55f;
-        private GraphicsUnit pixels = GraphicsUnit.Point;
+        //private GraphicsUnit pixels = GraphicsUnit.Point;
 
-        public Mouse(Point pos, InputHook ih)
-        {
-            timer = Stopwatch.StartNew();
-            this.pos = pos;
-            inputHook = ih;
-            inputHook.onMouseMove += onMove;
-            smoothingMult = 1 / smoothing;
-            leftImage = Properties.Resources.Mouse_Left;
-            rightImage = Properties.Resources.Mouse_Right;
-            var leftPoint = new PointF(pos.X - 50, pos.Y - 380);
-            var rightPoint = new PointF(pos.X + 84, pos.Y - 380);
-            leftRectangle = calculateRectangle(leftPoint, leftImage, scaleX, scaleY);
-            rightRectangle = calculateRectangle(rightPoint, rightImage, scaleX, scaleY);
-            leftOrigin = leftRectangle.Location;
-            rightOrigin = rightRectangle.Location;
-        }
+        //public Mouse(Point pos, InputHook ih)
+        //{
+        //    timer = Stopwatch.StartNew();
+        //    this.pos = pos;
+        //    inputHook = ih;
+        //    inputHook.onMouseMove += onMove;
+        //    smoothingMult = 1 / smoothing;
+        //    leftImage = Properties.Resources.Mouse_Left;
+        //    rightImage = Properties.Resources.Mouse_Right;
+        //    var leftPoint = new PointF(pos.X - 50, pos.Y - 380);
+        //    var rightPoint = new PointF(pos.X + 84, pos.Y - 380);
+        //    leftRectangle = calculateRectangle(leftPoint, leftImage, scaleX, scaleY);
+        //    rightRectangle = calculateRectangle(rightPoint, rightImage, scaleX, scaleY);
+        //    leftOrigin = leftRectangle.Location;
+        //    rightOrigin = rightRectangle.Location;
+        //}
 
-        private RectangleF calculateRectangle(PointF pos, Image img, float scaleX, float scaleY)
-        {
-            RectangleF imgRc = img.GetBounds(ref pixels);
-            imgRc.Size = new SizeF(imgRc.Size.Width * scaleX, imgRc.Size.Height * scaleY);
-            imgRc.Offset(pos);
-            return imgRc;
-        }
+        //private RectangleF calculateRectangle(PointF pos, Image img, float scaleX, float scaleY)
+        //{
+        //    RectangleF imgRc = img.GetBounds(ref pixels);
+        //    imgRc.Size = new SizeF(imgRc.Size.Width * scaleX, imgRc.Size.Height * scaleY);
+        //    imgRc.Offset(pos);
+        //    return imgRc;
+        //}
 
         private void onMove(object sender, MouseEventArgs e)
         {
@@ -68,21 +68,21 @@ namespace Input_Overlay.Input
         {
             inputHook.onMouseMove -= onMove;
         }
-        public void Paint(PaintEventArgs e)
-        {
-            var tDelta = timer.ElapsedMilliseconds - lastFrame;
-            lastFrame = timer.ElapsedMilliseconds;
-            float xSpeed = deltaX / tDelta;
-            float ySpeed = deltaY / tDelta;
-            leftRectangle.Location = leftOrigin;
-            rightRectangle.Location = rightOrigin;
-            leftRectangle.Offset(new PointF(xSpeed * 10, ySpeed * 10));
-            rightRectangle.Offset(new PointF(xSpeed * 10, ySpeed * 10));
-            e.Graphics.DrawImage(leftImage, leftRectangle);
-            e.Graphics.DrawImage(rightImage, rightRectangle);
-            deltaX *= smoothingMult * 1.5f;
-            deltaY *= smoothingMult * 1.5f;
-        }
+        //public void Paint(PaintEventArgs e)
+        //{
+        //    var tDelta = timer.ElapsedMilliseconds - lastFrame;
+        //    lastFrame = timer.ElapsedMilliseconds;
+        //    float xSpeed = deltaX / tDelta;
+        //    float ySpeed = deltaY / tDelta;
+        //    leftRectangle.Location = leftOrigin;
+        //    rightRectangle.Location = rightOrigin;
+        //    leftRectangle.Offset(new PointF(xSpeed * 10, ySpeed * 10));
+        //    rightRectangle.Offset(new PointF(xSpeed * 10, ySpeed * 10));
+        //    e.Graphics.DrawImage(leftImage, leftRectangle);
+        //    e.Graphics.DrawImage(rightImage, rightRectangle);
+        //    deltaX *= smoothingMult * 1.5f;
+        //    deltaY *= smoothingMult * 1.5f;
+        //}
     }
     class MouseSpeed
     {

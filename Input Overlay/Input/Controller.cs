@@ -67,52 +67,52 @@ namespace Input_Overlay.Input
             }
             return gp;
         }
-        public void Paint(float X, float Y,PaintEventArgs e)
-        {
-            Image leftTriggerImage = gamepad.LTrigger_N > 0.1f ? Properties.Resources.LeftTrigger_Pressed : Properties.Resources.LeftTrigger;
-            Image rightTriggerImage = gamepad.RTrigger_N > 0.1f ? Properties.Resources.RightTrigger_Pressed : Properties.Resources.RightTrigger;
-            e.Graphics.DrawImageUnscaled(leftTriggerImage, LeftTriggerPos);
-            e.Graphics.DrawImageUnscaled(rightTriggerImage, RightTriggerPos);
+        //public void Paint(float X, float Y,PaintEventArgs e)
+        //{
+        //    Image leftTriggerImage = gamepad.LTrigger_N > 0.1f ? Properties.Resources.LeftTrigger_Pressed : Properties.Resources.LeftTrigger;
+        //    Image rightTriggerImage = gamepad.RTrigger_N > 0.1f ? Properties.Resources.RightTrigger_Pressed : Properties.Resources.RightTrigger;
+        //    e.Graphics.DrawImageUnscaled(leftTriggerImage, LeftTriggerPos);
+        //    e.Graphics.DrawImageUnscaled(rightTriggerImage, RightTriggerPos);
 
-            Image leftBumperImage = gamepad.LBumper_down ? Properties.Resources.LeftBumper_Pressed : Properties.Resources.LeftBumper;
-            Image rightBumperImage = gamepad.RBumper_down ? Properties.Resources.RightBumper_Pressed : Properties.Resources.RightBumper;
-            e.Graphics.DrawImageUnscaled(leftBumperImage, LeftBumperPos);
-            e.Graphics.DrawImageUnscaled(rightBumperImage, RightBumperPos);
+        //    Image leftBumperImage = gamepad.LBumper_down ? Properties.Resources.LeftBumper_Pressed : Properties.Resources.LeftBumper;
+        //    Image rightBumperImage = gamepad.RBumper_down ? Properties.Resources.RightBumper_Pressed : Properties.Resources.RightBumper;
+        //    e.Graphics.DrawImageUnscaled(leftBumperImage, LeftBumperPos);
+        //    e.Graphics.DrawImageUnscaled(rightBumperImage, RightBumperPos);
 
-            e.Graphics.DrawImageUnscaled(Properties.Resources.Controller, 0, 0);
+        //    e.Graphics.DrawImageUnscaled(Properties.Resources.Controller, 0, 0);
 
-            X.PointF LStick = gamepad.LStick_N;
-            X.PointF RStick = gamepad.RStick_N;
-            PaintStick(leftStickPos, LStick, e);
-            PaintStick(rightStickPos, RStick, e);
-            PaintButton(XPos, gamepad.X_down, e);
-            PaintButton(YPos, gamepad.Y_down, e);
-            PaintButton(BPos, gamepad.B_down, e);
-            PaintButton(APos, gamepad.A_down, e);
-            PaintDPADButton(UpDpadPos, RotateFlipType.RotateNoneFlipNone, gamepad.Dpad_Up_down, e);
-            PaintDPADButton(DownDpadPos, RotateFlipType.Rotate180FlipNone, gamepad.Dpad_Down_down, e);
-            PaintDPADButton(RightDpadPos, RotateFlipType.Rotate90FlipNone, gamepad.Dpad_Right_down, e);
-            PaintDPADButton(LeftDpadPos, RotateFlipType.Rotate270FlipNone, gamepad.Dpad_Left_down, e);
-        }
-        private void PaintStick(Point point, X.PointF stick, PaintEventArgs e)
-        {
-            bool stickChanged = (bool)(stick.X + stick.Y != 0);
-            Image stickImage = stickChanged ? Properties.Resources.Stick_Pressed : Properties.Resources.Stick;
-            Point stickFinal = new Point(point.X, point.Y);
-            stickFinal.Offset((int)(stick.X * stickRadius), (int)(stick.Y * -stickRadius));
-            e.Graphics.DrawImageUnscaled(stickImage, stickFinal);
+        //    X.PointF LStick = gamepad.LStick_N;
+        //    X.PointF RStick = gamepad.RStick_N;
+        //    PaintStick(leftStickPos, LStick, e);
+        //    PaintStick(rightStickPos, RStick, e);
+        //    PaintButton(XPos, gamepad.X_down, e);
+        //    PaintButton(YPos, gamepad.Y_down, e);
+        //    PaintButton(BPos, gamepad.B_down, e);
+        //    PaintButton(APos, gamepad.A_down, e);
+        //    PaintDPADButton(UpDpadPos, RotateFlipType.RotateNoneFlipNone, gamepad.Dpad_Up_down, e);
+        //    PaintDPADButton(DownDpadPos, RotateFlipType.Rotate180FlipNone, gamepad.Dpad_Down_down, e);
+        //    PaintDPADButton(RightDpadPos, RotateFlipType.Rotate90FlipNone, gamepad.Dpad_Right_down, e);
+        //    PaintDPADButton(LeftDpadPos, RotateFlipType.Rotate270FlipNone, gamepad.Dpad_Left_down, e);
+        //}
+        //private void PaintStick(Point point, X.PointF stick, PaintEventArgs e)
+        //{
+        //    bool stickChanged = (bool)(stick.X + stick.Y != 0);
+        //    Image stickImage = stickChanged ? Properties.Resources.Stick_Pressed : Properties.Resources.Stick;
+        //    Point stickFinal = new Point(point.X, point.Y);
+        //    stickFinal.Offset((int)(stick.X * stickRadius), (int)(stick.Y * -stickRadius));
+        //    e.Graphics.DrawImageUnscaled(stickImage, stickFinal);
 
-        }
-        private void PaintButton(Point point, bool pressed, PaintEventArgs e) {
-            Image img = pressed ? Properties.Resources.Button_Pressed : Properties.Resources.Button;
-            e.Graphics.DrawImageUnscaled(img, point);
-        }
-        private void PaintDPADButton(Point point, RotateFlipType rotate, bool pressed, PaintEventArgs e)
-        {
-            Image img = pressed ? Properties.Resources.DPad_Pressed : Properties.Resources.DPad;
-            img.RotateFlip(rotate);
-            e.Graphics.DrawImageUnscaled(img, point);
-        }
+        //}
+        //private void PaintButton(Point point, bool pressed, PaintEventArgs e) {
+        //    Image img = pressed ? Properties.Resources.Button_Pressed : Properties.Resources.Button;
+        //    e.Graphics.DrawImageUnscaled(img, point);
+        //}
+        //private void PaintDPADButton(Point point, RotateFlipType rotate, bool pressed, PaintEventArgs e)
+        //{
+        //    Image img = pressed ? Properties.Resources.DPad_Pressed : Properties.Resources.DPad;
+        //    img.RotateFlip(rotate);
+        //    e.Graphics.DrawImageUnscaled(img, point);
+        //}
         public void Stop()
         {
             X.StopPolling();
