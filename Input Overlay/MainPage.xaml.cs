@@ -26,5 +26,10 @@ namespace Input_Overlay
         {
             this.InitializeComponent();
         }
+
+        private void CanvasAnimatedControl_Draw(Microsoft.Graphics.Canvas.UI.Xaml.ICanvasAnimatedControl sender, Microsoft.Graphics.Canvas.UI.Xaml.CanvasAnimatedDrawEventArgs args)
+        {
+
+        }
     }
 }
